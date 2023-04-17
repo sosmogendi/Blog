@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(u=r@*g4w(-mu+p9&bw82$z!9b!&2!h%2ga_sibc_37yq9gnm('
+
+with open(os.path.join(BASE_DIR, '..', 'secrets.json')) as f:
+    secrets = json.loads(f.read())
+SECRET_KEY = '_yr6)j@6l_0o(rlcfw6z0@k&k%%ow-=@-4m+5m22xl3w$qegu%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -123,7 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -142,6 +146,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+# Update secrets with SMTP credentials
+secrets['EMAIL_HOST_USER'] = EMAIL_HOST_USER
+secrets['EMAIL_HOST_PASSWORD'] = EMAIL_HOST_PASSWORD
+
+# Use secrets.EMAIL_HOST_USER and secrets.EMAIL_HOST_PASSWORD in your code
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
